@@ -9,12 +9,16 @@ import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun courseAdapterDelegate() =
+fun courseAdapterDelegate(onLikeClicked: (Course) -> Unit) =
     adapterDelegateViewBinding<Course, Course, ItemCourseBinding>(
         { layoutInflater: LayoutInflater, parent: ViewGroup ->
             ItemCourseBinding.inflate(layoutInflater, parent, false)
         }
     ) {
+        binding.bookmark.setOnClickListener {
+            onLikeClicked(item)
+        }
+
         val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("ru"))
         bind {
             binding.rate.text = item.rate
@@ -22,7 +26,17 @@ fun courseAdapterDelegate() =
             binding.title.text = item.title
             binding.description.text = item.text
             binding.price.text = "${item.price} ₽"
-            binding.bookmark.setImageResource(if (item.hasLike) R.drawable.bookmark_fill
+            binding.bookmark.setImageResource(
+                if (item.hasLike) R.drawable.bookmark_fill
                 else R.drawable.bookmark)
+            binding.cover.setImageResource(
+                when  (item.id) {
+                    100 -> R.drawable.id100
+                    101 -> R.drawable.id101
+                    102 -> R.drawable.id102
+                    103 -> R.drawable.id101
+                    else -> R.drawable.id100
+                }
+            )
         }
     }
