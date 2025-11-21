@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
-
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -37,6 +37,10 @@ android {
 
 dependencies {
     implementation(project(":core"))
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
