@@ -5,43 +5,60 @@ import androidx.lifecycle.viewModelScope
 import com.aiinty.domain.model.Course
 import com.aiinty.domain.model.CourseSortType
 import com.aiinty.domain.usecase.GetCoursesUseCase
+import com.aiinty.domain.usecase.InitDatabaseUseCase
+import com.aiinty.domain.usecase.ToggleLikeStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCoursesUseCase: GetCoursesUseCase
+    private val getCoursesUseCase: GetCoursesUseCase,
+    private val toggleLikeStatusUseCase: ToggleLikeStatusUseCase,
+    private val initDatabaseUseCase: InitDatabaseUseCase
 ) : ViewModel() {
-    private val _courses = MutableStateFlow<List<Course>>(emptyList())
-    val courses: StateFlow<List<Course>> get() = _courses
-
     private val _sortType = MutableStateFlow(CourseSortType.BY_PUBLISH_DATE_ASC)
     val sortType: StateFlow<CourseSortType> get() = _sortType
 
-    init {
-        loadCourses()
-    }
+    val courses: StateFlow<List<Course>> = getCoursesUseCase()
+        .combine(_sortType) { courseList, sort ->
+            when (sort) {
+                CourseSortType.BY_PUBLISH_DATE_ASC ->
+                    courseList.sortedBy { it.publishDate }
+                CourseSortType.BY_PUBLISH_DATE_DESC ->
+                    courseList.sortedByDescending { it.publishDate }
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
 
-    private fun loadCourses() {
+    init {
         viewModelScope.launch {
-            _courses.value = getCoursesUseCase()
+            initDatabaseUseCase()
         }
     }
 
     fun toggleSortByPublishDate() {
-        val newSort = if (_sortType.value == CourseSortType.BY_PUBLISH_DATE_DESC)
-            CourseSortType.BY_PUBLISH_DATE_ASC else CourseSortType.BY_PUBLISH_DATE_DESC
-        _sortType.value = newSort
-        applySort()
+        _sortType.update { currentSort ->
+            if (currentSort == CourseSortType.BY_PUBLISH_DATE_DESC)
+                CourseSortType.BY_PUBLISH_DATE_ASC
+            else
+                CourseSortType.BY_PUBLISH_DATE_DESC
+        }
     }
 
-    private fun applySort() {
-        _courses.value = when (_sortType.value) {
-            CourseSortType.BY_PUBLISH_DATE_ASC -> _courses.value.sortedBy { it.publishDate }
-            else -> _courses.value.sortedByDescending { it.publishDate }
+    fun onLikeClicked(course: Course) {
+        viewModelScope.launch {
+            toggleLikeStatusUseCase(course.id, course.hasLike)
         }
     }
 }
