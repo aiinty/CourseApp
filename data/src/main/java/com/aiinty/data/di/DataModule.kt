@@ -5,6 +5,8 @@ import com.aiinty.data.repository.CourseRepositoryImpl
 import com.aiinty.domain.repository.CourseRepository
 import com.aiinty.domain.usecase.GetCoursesUseCase
 import com.aiinty.domain.usecase.GetFavoriteCoursesUseCase
+import com.aiinty.domain.usecase.InitDatabaseUseCase
+import com.aiinty.domain.usecase.ToggleLikeStatusUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +33,18 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideGetFavoriteCoursesUseCase(repository: CourseRepository) = GetFavoriteCoursesUseCase(repository)
+    fun provideGetFavoriteCoursesUseCase(repository: CourseRepository) =
+        GetFavoriteCoursesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideToggleLikeStatusUseCase(repository: CourseRepository): ToggleLikeStatusUseCase {
+        return ToggleLikeStatusUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInitDatabaseUseCase (repository: CourseRepository): InitDatabaseUseCase {
+        return InitDatabaseUseCase(repository)
+    }
 }
