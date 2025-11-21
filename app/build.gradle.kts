@@ -43,16 +43,15 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":feature"))
     implementation(project(":feature:login"))
-    implementation(project(":feature:home"))
     implementation(project(":feature:favorites"))
     implementation(project(":feature:account"))
+    implementation(project(":feature:home"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     app:cardBackgroundColor="@color/dark_gray"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="16dp"
+    android:layout_marginVertical="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                     android:id="@+id/rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/light_text"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:layout_marginStart="4dp"
                     tools:text="4.9"/>
@@ -96,7 +96,7 @@
                     android:id="@+id/publishDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/light_text"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="22 Мая 2024"/>
 
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Название курса"
-                android:textColor="@color/light_text"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:maxLines="1"
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:textColor="@color/light_text"
+                android:textColor="@color/white"
                 android:textSize="12sp"
                 android:alpha="0.7"
                 android:layout_marginTop="4dp"
@@ -153,7 +153,7 @@
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/light_text"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     tools:text="3 900 ₽" />

@@ -7,11 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.setPadding
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.aiinty.favorites.FavoritesFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,12 +28,20 @@ class MainActivity : AppCompatActivity() {
         insetsController.isAppearanceLightStatusBars = false
         insetsController.isAppearanceLightNavigationBars = false
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = NavHostFragment.create(R.navigation.nav_graph)
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_fragment, navHostFragment)
+            .setPrimaryNavigationFragment(navHostFragment)
+            .commitNow()
         val navController = navHostFragment.navController
+        navController.setGraph(R.navigation.nav_graph)
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.setupWithNavController(navController)
         bottomNav.setOnApplyWindowInsetsListener(null)
         bottomNav.setPadding(0,0,0,0)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in setOf(R.id.homeFragment, R.id.favoritesFragment, R.id.accountFragment)) {
                 bottomNav.visibility = View.VISIBLE
@@ -44,6 +49,5 @@ class MainActivity : AppCompatActivity() {
                 bottomNav.visibility = View.GONE
             }
         }
-
     }
 }
