@@ -20,7 +20,11 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: FavoritesViewModel by viewModels()
-    private val adapter by lazy { CourseAdapter() }
+    private val adapter by lazy {
+        CourseAdapter { course ->
+            viewModel.onLikeClicked(course)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingHorizontal="16dp"
     tools:background="@color/dark"
     >
 
@@ -11,9 +13,8 @@
         android:id="@+id/tvFavorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:text="@string/favorites"
-        android:textColor="@color/light_text"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:textFontWeight="400"
         app:layout_constraintTop_toTopOf="parent"
